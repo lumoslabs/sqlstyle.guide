@@ -166,7 +166,7 @@ and `ORDER BY`should be fully left justified.
 For single `SELECT`s, you can use the single line form:
 
 ```sql
-SELECT first_name
+SELECT first_name AS name
 FROM rappers
 ```
 
@@ -177,7 +177,7 @@ spaces in a block after the `SELECT` keyword.
 SELECT
   first_name,
   last_name,
-  is_still_tippin_on_four_fours,
+  is_still_tippin_on_four_fours AS tippin,
   is_still_wrapped_in_four_vogues
 FROM rappers
 WHERE first_name = 'Mike'
@@ -202,7 +202,7 @@ SELECT
   a.recording_date
 FROM albums AS a
 WHERE a.title = 'Charcoal Lane'
-   OR a.title = 'The New Danger';
+  OR a.title = 'The New Danger';
 ```
 
 #### Line spacing
@@ -218,18 +218,48 @@ Always include newlines/vertical space:
   large chunks of code.
 
 Keeping all the dependent keywords (e.g. `ON` depends on `JOIN`, `AND` depends on `WHERE`,
-`SET` depends on `UPDATE` right aligned with the top level keywords helps make it clear
+`SET` depends on `UPDATE` indented after the top level keywords helps make it clear
 all the lines are part of the same clause.
 
 ```sql
 INSERT INTO albums (title, release_date, recording_date)
-VALUES ('Charcoal Lane', '1990-01-01 01:01:01.00000', '1990-01-01 01:01:01.00000'),
-       ('The New Danger', '2008-01-01 01:01:01.00000', '1990-01-01 01:01:01.00000');
+VALUES
+  ('Charcoal Lane', '1990-01-01 01:01:01.00000', '1990-01-01 01:01:01.00000'),
+  ('The New Danger', '2008-01-01 01:01:01.00000', '1990-01-01 01:01:01.00000');
+```
+
+```sql
+INSERT INTO albums
+(
+  title,
+  release_date,
+  recording_date
+)
+VALUES
+(
+  'Charcoal Lane',
+  '1990-01-01 01:01:01.00000',
+  '1990-01-01 01:01:01.00000'
+),
+(
+  'The New Danger',
+  '2008-01-01 01:01:01.00000',
+  '1990-01-01 01:01:01.00000'
+);
 ```
 
 ```sql
 UPDATE albums
-   SET release_date = '1990-01-01 01:01:01.00000'
+  SET release_date = '1990-01-01 01:01:01.00000'
+WHERE title = 'The New Danger';
+```
+
+```sql
+UPDATE albums
+  SET
+    release_date = '1990-01-01 01:01:01.00000',
+    author = 'John Smith',
+    price = 123.45
 WHERE title = 'The New Danger';
 ```
 
@@ -241,7 +271,7 @@ SELECT
   a.production_date
 FROM albums AS a
 WHERE a.title = 'Charcoal Lane'
-   OR a.title = 'The New Danger';
+  OR a.title = 'The New Danger';
 ```
 
 #### JOINs
@@ -253,7 +283,7 @@ Single line `JOIN`s are fine for simple situations
 ```sql
 SELECT r.last_name
 FROM riders AS r
-  INNER JOIN bikes AS b ON r.bike_vin_num = b.vin_num
+  JOIN bikes AS b ON r.bike_vin_num = b.vin_num
   INNER JOIN crew AS c ON r.crew_chief_last_name = c.last_name
 ```
 
@@ -263,8 +293,8 @@ Multi line JOINs should be indented as per the dependent keywords rule:
 SELECT r.last_name
 FROM riders AS r
   INNER JOIN bikes AS b
-          ON r.bike_vin_num = b.vin_num
-         AND r.bike_lane = r.lane
+    ON r.bike_vin_num = b.vin_num
+    AND r.bike_lane = r.lane
   INNER JOIN crew c ON r.crew_chief_last_name = c.last_name
 WHERE id = 5
 ```
@@ -513,12 +543,12 @@ constraints along with field value validation.
 
 ```sql
 CREATE TABLE staff (
-    PRIMARY KEY (staff_num),
-    staff_num      INT(5)       NOT NULL,
-    first_name     VARCHAR(100) NOT NULL,
-    pens_in_drawer INT(2)       NOT NULL,
-                   CONSTRAINT pens_in_drawer_range
-                   CHECK(pens_in_drawer >= 1 AND pens_in_drawer < 100)
+  PRIMARY KEY (staff_num),
+  staff_num INT(5) NOT NULL,
+  first_name VARCHAR(100) NOT NULL,
+  pens_in_drawer INT(2) NOT NULL,
+    CONSTRAINT pens_in_drawer_range
+    CHECK(pens_in_drawer >= 1 AND pens_in_drawer < 100)
 );
 ```
 
